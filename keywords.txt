@@ -1,0 +1,15 @@
+GrafcetT	KEYWORD1
+MemoriaT	KEYWORD1
+IngressoT	KEYWORD1
+UscitaT	KEYWORD1
+TimerTonT	KEYWORD1
+SubT	KEYWORD1
+CounterUpDownT	KEYWORD1
+stato	KEYWORD2
+inizializza	KEYWORD2
+in	KEYWORD2
+up	KEYWORD2
+down	KEYWORD2
+reset	KEYWORD2
+acquisizioneIngressi	KEYWORD2
+pubblicazioneUscite	KEYWORD2
