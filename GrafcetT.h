@@ -76,6 +76,7 @@ class TimerTonT{
     bool in;
     void tempo(unsigned long&);
     static int i;
+    unsigned long getConteggio();
     
   private:
     unsigned long conteggio=0;
@@ -110,6 +111,8 @@ public:
   bool reset;
   static int i;
   void conta();
+  int getConteggio();
+  
 private:
   int conteggio=0;
   bool oldUp,oldDown;

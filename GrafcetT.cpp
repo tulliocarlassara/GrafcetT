@@ -173,6 +173,10 @@ void TimerTonT::tempo(unsigned long& newTime){
   else stato=false;
 }
 
+unsigned long TimerTonT::getConteggio(){
+  return conteggio;
+}
+
 //***********************************************************************************************
 
 int SubT::i=0;
@@ -223,5 +227,9 @@ void CounterUpDownT::conta(){
   if(reset) conteggio=0;
   if(conteggio>=pv) stato=true;
   else stato=false;
+}
+
+int CounterUpDownT::getConteggio(){
+  return conteggio;
 }
 
