@@ -1,7 +1,7 @@
 /*
  * GrafcetT.cpp
  *
- * by Tullio Carlassara - 2016
+ * by Tullio Carlassara - 2016 - 2025
  *
  * This library is distributed in the hope that it will be useful but WITHOUT ANY WARRANTY.
  */
@@ -16,6 +16,7 @@ TimerTonT** timer=NULL;
 SubT** subroutines=NULL;
 CounterUpDownT** counterUpDown=NULL;
 
+int GrafcetT::numeroMemorie=0;
 int GrafcetT::numeroIngressi=0;
 int GrafcetT::numeroUscite=0;
 int GrafcetT::numeroTimerTon=0;
@@ -36,6 +37,7 @@ T incrementaArray(int dimensioneFinale, T arrayIniziale){
 //***********************************************************************************************
 
 void GrafcetT::inizializza(){
+  numeroMemorie=MemoriaT::i;
   numeroIngressi=IngressoT::i;
   numeroUscite=UscitaT::i;
   numeroSub=SubT::i;
@@ -51,7 +53,6 @@ void GrafcetT::inizializza(){
 }
 
 void GrafcetT::acquisizioneIngressi(){
-
   //acquisizione ingressi
   for(int i=0; i<numeroIngressi; i++){
     ingressi[i]->leggi();
@@ -75,11 +76,17 @@ void GrafcetT::acquisizioneIngressi(){
 }
 
 void GrafcetT::pubblicazioneUscite(){
-
   //pubblicazione uscite
   for(int i=0; i<numeroUscite; i++){
     uscite[i]->scrivi();
   }
+}
+
+void GrafcetT::aggiornaStati(){
+  //aggiornaMemorie e calcola onEn, onEx
+  for(int i=0; i<numeroMemorie; i++){
+    memorie[i]->aggiorna();
+  }  
 }
 
 //***********************************************************************************************
@@ -89,10 +96,19 @@ int MemoriaT::i=0;
 MemoriaT::MemoriaT(){
   
   stato=false;
+  oldStato=false;
+  onEn=false;
+  onEx=false;
   
   memorie=incrementaArray(i+1,memorie);
   memorie[i]=this;
   i++;
+}
+
+void MemoriaT::aggiorna(){
+  onEn=(stato && !oldStato);
+  onEx=(!stato && oldStato);
+  oldStato=stato;
 }
 
 //***********************************************************************************************
@@ -115,6 +131,8 @@ void IngressoT::setupIngresso(){
   if(!pullUp) pinMode(pin,INPUT);
   else pinMode(pin,INPUT_PULLUP);
   stato=digitalRead(pin);
+  oldStato=stato;
+  up=down=change=false;
 }
 
 void IngressoT::leggi(){
@@ -128,6 +146,11 @@ void IngressoT::leggi(){
     }
     if(flag && millis()-oldMillis >= tempoAntirimbalzo) flag=false;
   }
+
+  up=(stato && !oldStato);
+  down=(!stato && oldStato);
+  change = (up || down);
+  oldStato=stato;
 }
 
 //***********************************************************************************************

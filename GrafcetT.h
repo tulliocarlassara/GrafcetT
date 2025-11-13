@@ -1,7 +1,7 @@
 /*
  * GrafcetT.h
  *
- * by Tullio Carlassara - 2016
+ * by Tullio Carlassara - 2016 - 2025
  *
  * This library is distributed in the hope that it will be useful but WITHOUT ANY WARRANTY.
  */
@@ -14,8 +14,10 @@ public:
   static void inizializza();
   static void acquisizioneIngressi();
   static void pubblicazioneUscite();
+  static void aggiornaStati();
   
 private:
+  static int numeroMemorie;
   static int numeroIngressi;
   static int numeroUscite;
   static int numeroTimerTon;
@@ -30,7 +32,11 @@ class MemoriaT{
 public:
   MemoriaT();
   bool stato;
+  bool oldStato;
+  bool onEn; // riseUp
+  bool onEx; // fallDown
   static int i;
+  void aggiorna();
 };
 
 //***********************************************************************************************
@@ -41,11 +47,15 @@ public:
   void setupIngresso();
   void leggi();
   bool stato;
+  bool up; // riseUp
+  bool down; // fallDown
+  bool change; // change
   static int i;
   
 private:
   bool flag;
   bool nuovoStato;
+  bool oldStato;
   bool pullUp;
   bool antiRimbalzo;
   int pin;
