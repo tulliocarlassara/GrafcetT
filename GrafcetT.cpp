@@ -10,6 +10,7 @@
 #include <Arduino.h>
 
 MemoriaT** memorie=NULL;
+FlagT** flags=NULL;
 IngressoT** ingressi=NULL;
 UscitaT** uscite=NULL;
 TimerTonT** timer=NULL;
@@ -17,6 +18,7 @@ SubT** subroutines=NULL;
 CounterUpDownT** counterUpDown=NULL;
 
 int GrafcetT::numeroMemorie=0;
+int GrafcetT::numeroFlags=0;
 int GrafcetT::numeroIngressi=0;
 int GrafcetT::numeroUscite=0;
 int GrafcetT::numeroTimerTon=0;
@@ -38,11 +40,13 @@ T incrementaArray(int dimensioneFinale, T arrayIniziale){
 
 void GrafcetT::inizializza(){
   numeroMemorie=MemoriaT::i;
+  numeroFlags=FlagT::i;
   numeroIngressi=IngressoT::i;
   numeroUscite=UscitaT::i;
   numeroSub=SubT::i;
   numeroTimerTon=TimerTonT::i;
   numeroCounterUpDown=CounterUpDownT::i;
+  newTime=0;
   
   for(int i=0;i<numeroIngressi; i++){
     ingressi[i]->setupIngresso();
@@ -83,10 +87,14 @@ void GrafcetT::pubblicazioneUscite(){
 }
 
 void GrafcetT::aggiornaStati(){
-  //aggiornaMemorie e calcola onEn, onEx
+  // aggiornaMemorie e calcola onEn, onEx
   for(int i=0; i<numeroMemorie; i++){
     memorie[i]->aggiorna();
-  }  
+  }
+  // aggiornaFlags e calcola up, down e change
+  for(int i=0; i<numeroFlags; i++){
+    flags[i]->aggiorna();
+  }
 }
 
 //***********************************************************************************************
@@ -108,6 +116,29 @@ MemoriaT::MemoriaT(){
 void MemoriaT::aggiorna(){
   onEn=(stato && !oldStato);
   onEx=(!stato && oldStato);
+  oldStato=stato;
+}
+
+//***********************************************************************************************
+
+int FlagT::i=0;
+
+FlagT::FlagT(){
+  stato = false;
+  oldStato = false;
+  up = false;
+  down = false;
+  change=false;
+
+  flags=incrementaArray(i+1,flags);
+  flags[i]=this;
+  i++;
+}
+
+void FlagT::aggiorna(){
+  up = (stato && !oldStato);
+  down = (!stato && oldStato);
+  change = (up || down);
   oldStato=stato;
 }
 
@@ -196,10 +227,6 @@ void TimerTonT::tempo(unsigned long& newTime){
   else stato=false;
 }
 
-unsigned long TimerTonT::getConteggio(){
-  return conteggio;
-}
-
 //***********************************************************************************************
 
 int SubT::i=0;
@@ -250,9 +277,5 @@ void CounterUpDownT::conta(){
   if(reset) conteggio=0;
   if(conteggio>=pv) stato=true;
   else stato=false;
-}
-
-int CounterUpDownT::getConteggio(){
-  return conteggio;
 }
 

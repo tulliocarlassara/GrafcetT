@@ -18,6 +18,7 @@ public:
   
 private:
   static int numeroMemorie;
+  static int numeroFlags;
   static int numeroIngressi;
   static int numeroUscite;
   static int numeroTimerTon;
@@ -39,12 +40,22 @@ public:
   void aggiorna();
 };
 
-
 //***********************************************************************************************
 
+class FlagT{
+public:
+  FlagT();
+  bool stato;
+  bool oldStato;
+  bool up; // riseUp
+  bool down; // fallDown
+  bool change;
+  void aggiorna();
+  inline void set()   { stato = true; }
+  inline void reset() { stato = false; }
 
-using FlagT = MemoriaT; // Alias per variabili booleane interne (Flag)
-
+  static int i;
+};
 
 //***********************************************************************************************
 
@@ -78,6 +89,9 @@ public:
   bool stato;
   void setupUscita();
   void scrivi();
+  inline void set()   { stato = true; }
+  inline void reset() { stato = false; }
+
   static int i;
   
 private:
@@ -93,8 +107,8 @@ class TimerTonT{
     bool in;
     void tempo(unsigned long&);
     static int i;
-    unsigned long getConteggio();
-    
+    inline unsigned long getConteggio() { return conteggio; }
+
   private:
     unsigned long conteggio=0;
     unsigned long oldTime;
@@ -128,7 +142,7 @@ public:
   bool reset;
   static int i;
   void conta();
-  int getConteggio();
+  inline int getConteggio() { return conteggio; }
   
 private:
   int conteggio=0;
