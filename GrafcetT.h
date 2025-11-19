@@ -61,7 +61,7 @@ public:
 
 class IngressoT{
 public:
-  IngressoT(int pin, bool pullUp=false, bool antiRimbalzo=false, unsigned long tempoAntirimbalzo=50);
+  IngressoT(int pin, bool pullUp=false, bool antiRimbalzo=false, unsigned long tempoAntirimbalzo=50, bool invertiLogica=false);
   void setupIngresso();
   void leggi();
   bool stato;
@@ -77,6 +77,7 @@ private:
   bool pullUp;
   bool antiRimbalzo;
   int pin;
+  bool invertiLogica;
   unsigned long tempoAntirimbalzo;
   unsigned long oldMillis;
 };

@@ -146,11 +146,12 @@ void FlagT::aggiorna(){
 
 int IngressoT::i=0;
 
-IngressoT::IngressoT(int pin, bool pullUp, bool antiRimbalzo, unsigned long tempoAntirimbalzo){
+IngressoT::IngressoT(int pin, bool pullUp, bool antiRimbalzo, unsigned long tempoAntirimbalzo, bool invertiLogica){
   this->pin = pin;
   this->pullUp = pullUp;
   this->antiRimbalzo = antiRimbalzo;
   this->tempoAntirimbalzo=tempoAntirimbalzo;
+  this->invertiLogica=invertiLogica;
   flag=false;
 
   ingressi=incrementaArray(i+1,ingressi);
@@ -159,30 +160,40 @@ IngressoT::IngressoT(int pin, bool pullUp, bool antiRimbalzo, unsigned long temp
 }
 
 void IngressoT::setupIngresso(){
-  if(!pullUp) pinMode(pin,INPUT);
-  else pinMode(pin,INPUT_PULLUP);
-  stato=digitalRead(pin);
-  oldStato=stato;
-  up=down=change=false;
+  if(!pullUp) pinMode(pin, INPUT);
+  else  pinMode(pin, INPUT_PULLUP);
+
+  stato = digitalRead(pin);
+  if(invertiLogica) stato = !stato;
+
+  oldStato = stato;
+  up = down = change = false;
 }
 
+
 void IngressoT::leggi(){
-  if(!antiRimbalzo) stato = digitalRead(pin);
-  else{
-    nuovoStato=digitalRead(pin);
-    if(!flag && (nuovoStato != stato)){
-      stato=nuovoStato;
-      oldMillis=millis();
-      flag=true;
+  if(!antiRimbalzo) {
+    stato = digitalRead(pin);
+    if(invertiLogica) stato = !stato;
+  } else {
+    nuovoStato = digitalRead(pin);
+    if(invertiLogica) nuovoStato = !nuovoStato;
+
+    if(!flag && (nuovoStato != stato)) {
+      stato = nuovoStato;
+      oldMillis = millis();
+      flag = true;
     }
-    if(flag && millis()-oldMillis >= tempoAntirimbalzo) flag=false;
+    if(flag && millis() - oldMillis >= tempoAntirimbalzo)
+      flag = false;
   }
 
   up=(stato && !oldStato);
-  down=(!stato && oldStato);
-  change = (up || down);
+  down=(!stato &&  oldStato);
+  change=(up || down);
   oldStato=stato;
 }
+
 
 //***********************************************************************************************
 
