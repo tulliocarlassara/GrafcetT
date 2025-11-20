@@ -12,8 +12,10 @@ in			KEYWORD2
 up			KEYWORD2
 down			KEYWORD2
 change			KEYWORD2
+set             KEYWORD2
 reset			KEYWORD2
 onEn			KEYWORD2
 onEx			KEYWORD2
 acquisizioneIngressi	KEYWORD2
-pubblicazioneUscite	KEYWORD2
+pubblicazioneUscite	    KEYWORD2
+aggiornaStati           KEYWORD2
