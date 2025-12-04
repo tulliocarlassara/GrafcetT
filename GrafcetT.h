@@ -108,6 +108,7 @@ class TimerTonT{
     bool in;
     void tempo(unsigned long&);
     static int i;
+    inline void setPt(unsigned long t) { pt = t; }
     inline unsigned long getConteggio() { return conteggio; }
     inline void setConteggio(unsigned long t) { conteggio = t; }
 
@@ -144,6 +145,7 @@ public:
   bool reset;
   static int i;
   void conta();
+  inline void setPv(int c) { pv = c; }
   inline int getConteggio() { return conteggio; }
   inline void setConteggio(int c) { conteggio = c; }
   

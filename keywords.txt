@@ -19,5 +19,7 @@ onEx			KEYWORD2
 acquisizioneIngressi	KEYWORD2
 pubblicazioneUscite	KEYWORD2
 aggiornaStati           KEYWORD2
+setPt               	KEYWORD2
+setPv               	KEYWORD2
 getConteggio		KEYWORD2
 setConteggio		KEYWORD2
