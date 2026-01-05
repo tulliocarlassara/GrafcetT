@@ -63,7 +63,7 @@ class IngressoT{
 public:
   IngressoT(int pin, bool pullUp=false, bool antiRimbalzo=false, unsigned long tempoAntirimbalzo=50, bool invertiLogica=false);
   void setupIngresso();
-  void leggi();
+  void leggi(unsigned long newTime);
   bool stato;
   bool up; // riseUp
   bool down; // fallDown
@@ -106,7 +106,7 @@ class TimerTonT{
     TimerTonT(unsigned long pt);
     bool stato;
     bool in;
-    void tempo(unsigned long&);
+    void tempo(unsigned long newTime);
     static int i;
     inline void setPt(unsigned long t) { pt = t; }
     inline unsigned long getConteggio() { return conteggio; }

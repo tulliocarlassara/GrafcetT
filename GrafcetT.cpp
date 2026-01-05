@@ -57,13 +57,15 @@ void GrafcetT::inizializza(){
 }
 
 void GrafcetT::acquisizioneIngressi(){
+  //acquisizione tempo
+  newTime = millis();
+
   //acquisizione ingressi
   for(int i=0; i<numeroIngressi; i++){
-    ingressi[i]->leggi();
+    ingressi[i]->leggi(newTime);
   }
 
   //aggiornamento timer
-  newTime = millis();
   for(int i=0; i<numeroTimerTon; i++){
     timer[i]->tempo(newTime);
   }
@@ -171,7 +173,7 @@ void IngressoT::setupIngresso(){
 }
 
 
-void IngressoT::leggi(){
+void IngressoT::leggi(unsigned long newTime){
   if(!antiRimbalzo) {
     stato = digitalRead(pin);
     if(invertiLogica) stato = !stato;
@@ -181,10 +183,10 @@ void IngressoT::leggi(){
 
     if(!flag && (nuovoStato != stato)) {
       stato = nuovoStato;
-      oldMillis = millis();
+      oldMillis = newTime;
       flag = true;
     }
-    if(flag && millis() - oldMillis >= tempoAntirimbalzo)
+    if(flag && newTime - oldMillis >= tempoAntirimbalzo)
       flag = false;
   }
 
@@ -228,7 +230,7 @@ TimerTonT::TimerTonT(unsigned long pt){
   i++;
 }
     
-void TimerTonT::tempo(unsigned long& newTime){
+void TimerTonT::tempo(unsigned long newTime){
   if(in) conteggio = newTime-oldTime;
   else {
     conteggio=0;
