@@ -212,10 +212,15 @@ UscitaT::UscitaT(int pin){
 
 void UscitaT::setupUscita(){
   pinMode(pin,OUTPUT);
+  digitalWrite(pin,stato);
+  oldStato = stato;
 }
 
 void UscitaT::scrivi(){
-  digitalWrite(pin,stato);
+  if(stato != oldStato){
+    digitalWrite(pin,stato);
+    oldStato=stato;
+  }
 }
 
 //***********************************************************************************************
