@@ -15,6 +15,7 @@ public:
   static void acquisizioneIngressi();
   static void pubblicazioneUscite();
   static void aggiornaStati();
+  static unsigned long newTime;
   
 private:
   static int numeroMemorie;
@@ -24,7 +25,6 @@ private:
   static int numeroTimerTon;
   static int numeroSub;
   static int numeroCounterUpDown;
-  static unsigned long newTime;
 };
 
 //***********************************************************************************************
