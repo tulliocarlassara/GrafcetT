@@ -133,6 +133,7 @@ private:
   void (*funzione)();
   MemoriaT* memoriaInizio,* memoriaFine;
   bool attivaPrimaMem=true;
+  bool finito=false;
 };
 
 //***********************************************************************************************

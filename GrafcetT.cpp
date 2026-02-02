@@ -262,17 +262,20 @@ SubT::SubT(void(*funzione)(), MemoriaT& memoriaInizio, MemoriaT& memoriaFine){
 void SubT::esegui(){
   if(in){
     if(attivaPrimaMem){
-      memoriaInizio->stato=true;
-      attivaPrimaMem=false;
+      memoriaInizio->stato = true;
+      attivaPrimaMem = false;
     }
     funzione();
+    if(memoriaFine->stato) finito = true;
   }
   else{
-    memoriaFine->stato=false;
-    attivaPrimaMem=true;
+    if(finito){
+      memoriaFine->stato = false;
+      attivaPrimaMem = true;
+      finito = false;
+    }
   }
-  if(memoriaFine->stato) stato=true;
-  else stato=false;
+  stato = memoriaFine->stato;
 }
 
 //***********************************************************************************************
