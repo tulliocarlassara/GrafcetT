@@ -1,7 +1,7 @@
 /*
  * GrafcetT.cpp
  *
- * by Tullio Carlassara - 2016 - 2025
+ * by Tullio Carlassara - 2016 - 2026
  *
  * This library is distributed in the hope that it will be useful but WITHOUT ANY WARRANTY.
  */
@@ -25,6 +25,12 @@ int GrafcetT::numeroTimerTon=0;
 int GrafcetT::numeroSub=0;
 int GrafcetT::numeroCounterUpDown=0;
 unsigned long GrafcetT::newTime=0;
+bool GrafcetT::scanEnabled=false;
+uint32_t GrafcetT::scanTime=0;
+uint32_t GrafcetT::maxScanTime=0;
+uint32_t GrafcetT::scanCounter=0;
+uint32_t GrafcetT::lastScanMicros=0;
+bool GrafcetT::scanStarted=false;
 
 template <typename T>
 T incrementaArray(int dimensioneFinale, T arrayIniziale){
@@ -47,6 +53,12 @@ void GrafcetT::inizializza(){
   numeroTimerTon=TimerTonT::i;
   numeroCounterUpDown=CounterUpDownT::i;
   newTime=0;
+  scanEnabled=false;
+  scanTime=0;
+  maxScanTime=0;
+  scanCounter=0;
+  lastScanMicros=0;
+  scanStarted=false;
   
   for(int i=0;i<numeroIngressi; i++){
     ingressi[i]->setupIngresso();
@@ -57,6 +69,19 @@ void GrafcetT::inizializza(){
 }
 
 void GrafcetT::acquisizioneIngressi(){
+  if(scanEnabled){
+    const uint32_t nowMicros = static_cast<uint32_t>(micros());
+    if(scanStarted){
+      // Sottrazione unsigned: corretta anche al rollover di micros().
+      scanTime = nowMicros - lastScanMicros;
+      if(scanTime > maxScanTime) maxScanTime = scanTime;
+    } else {
+      scanStarted = true;
+    }
+    lastScanMicros = nowMicros;
+    ++scanCounter;
+  }
+
   //acquisizione tempo
   newTime = millis();
 
@@ -266,7 +291,7 @@ void SubT::esegui(){
       attivaPrimaMem = false;
     }
     funzione();
-    if(memoriaFine->stato) finito = true;
+    finito = memoriaFine->stato;
   }
   else{
     if(finito){

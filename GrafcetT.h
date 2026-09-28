@@ -1,13 +1,15 @@
 /*
  * GrafcetT.h
  *
- * by Tullio Carlassara - 2016 - 2025
+ * by Tullio Carlassara - 2016 - 2026
  *
  * This library is distributed in the hope that it will be useful but WITHOUT ANY WARRANTY.
  */
 
 #ifndef GRAFCETT_H
 #define GRAFCETT_H
+
+#include <stdint.h>
 
 class GrafcetT{
 public:
@@ -16,8 +18,18 @@ public:
   static void pubblicazioneUscite();
   static void aggiornaStati();
   static unsigned long newTime;
+  // Abilitare dopo inizializza(); false evita la misura a ogni ciclo.
+  static bool scanEnabled;
+  // Intervallo tra acquisizioni successive, in microsecondi (include il debug).
+  // La prima acquisizione inizializza il riferimento e lascia i tempi a zero.
+  static uint32_t scanTime;
+  static uint32_t maxScanTime;
+  // Acquisizioni misurate dall'inizializzazione; riparte da zero dopo UINT32_MAX.
+  static uint32_t scanCounter;
   
 private:
+  static uint32_t lastScanMicros;
+  static bool scanStarted;
   static int numeroMemorie;
   static int numeroFlags;
   static int numeroIngressi;
